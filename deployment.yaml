@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: choreography
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: warehouse-app
+  namespace: choreography
+spec:
+  selector:
+    app: warehouse-app
+  ports:
+  - port: 8080
+    name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: warehouse-app
+  namespace: choreography
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: warehouse-app
+  template:
+    metadata:
+      labels:
+        app: warehouse-app
+    spec:
+      containers:
+      - name: warehouse-app
+        image: 211125719632.dkr.ecr.eu-central-1.amazonaws.com/saga-choreography/warehouse:4344a56
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8080
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: 500m
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 120
+          failureThreshold: 10
+          timeoutSeconds: 5
+          periodSeconds: 3
+        env:
+          - name: POSTGRES_URL
+            value: "choreo-postgresql.choreography.svc.cluster.local:5432/postgres"
+          - name: POSTGRES_PASS
+            valueFrom:
+              secretKeyRef:
+                name: dbpass
+                key: db-pass
+          - name: KAFKA_BROKER
+            value: "choreo-kafka.choreography.svc.cluster.local:9092"
+      imagePullSecrets:
+        - name: ecr-key
