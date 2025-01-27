@@ -79,7 +79,7 @@ spec:
           periodSeconds: 3
         env:
           - name: POSTGRES_URL
-            value: "choreo-postgresql.choreography.svc.cluster.local:5432/postgres"
+            value: "choreo-postgresql.choreography.svc.cluster.local:5432/warehouse"
           - name: POSTGRES_PASS
             valueFrom:
               secretKeyRef:
