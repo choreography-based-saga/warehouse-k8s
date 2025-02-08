@@ -26,7 +26,7 @@ spec:
     - host: warehouse-service.com
       http:
         paths:
-          - path: /api/v1/warehouse
+          - path: /api/v1/warehouse-management-system
             pathType: Prefix
             backend:
               service:
@@ -51,7 +51,7 @@ spec:
     spec:
       containers:
       - name: warehouse-app
-        image: 211125719632.dkr.ecr.eu-central-1.amazonaws.com/saga-choreography/warehouse:4344a56
+        image: 211125719632.dkr.ecr.eu-central-1.amazonaws.com/saga-choreography:warehouse-b4b6637
         imagePullPolicy: Always
         ports:
           - containerPort: 8080
@@ -79,13 +79,11 @@ spec:
           periodSeconds: 3
         env:
           - name: POSTGRES_URL
-            value: "choreo-postgresql.choreography.svc.cluster.local:5432/warehouse"
+            value: "db-instance-choreography.chc66iy8gi9u.eu-central-1.rds.amazonaws.com:5432"
           - name: POSTGRES_PASS
             valueFrom:
               secretKeyRef:
                 name: dbpass
                 key: db-pass
-          - name: KAFKA_BROKER
-            value: "choreo-kafka.choreography.svc.cluster.local:9092"
       imagePullSecrets:
         - name: ecr-key
