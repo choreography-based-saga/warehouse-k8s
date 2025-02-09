@@ -85,5 +85,3 @@ spec:
               secretKeyRef:
                 name: dbpass
                 key: db-pass
-      imagePullSecrets:
-        - name: ecr-key
