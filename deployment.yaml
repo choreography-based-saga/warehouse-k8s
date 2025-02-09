@@ -85,3 +85,12 @@ spec:
               secretKeyRef:
                 name: dbpass
                 key: db-pass
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dbpass
+  namespace: choreography
+type: Opaque
+data:
+  db-pass: "cm9vdF9wb3N0Z3Jlc19wYXNz"
