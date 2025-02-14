@@ -51,7 +51,7 @@ spec:
     spec:
       containers:
       - name: warehouse-app
-        image: 211125719632.dkr.ecr.eu-central-1.amazonaws.com/saga-choreography:warehouse-b4b6637
+        image: 211125719632.dkr.ecr.eu-central-1.amazonaws.com/saga-choreography:warehouse-963c501
         imagePullPolicy: Always
         ports:
           - containerPort: 8080
